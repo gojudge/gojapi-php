@@ -17,19 +17,28 @@ class Judger{
 		$this->url = "http://".$this->host.":".$this->port;
 	}
 
-	private post(string content){
-		return "";
+	private function post($post_string){
+		$remote_server = $this->url;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $remote_server);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Goj Client API");
+		$data = curl_exec($ch);
+		curl_close($ch);
+		return $data;
 	}
 
-	private login($password){
+	private function login($password){
 		return false;
 	}
 
-	public add_task(){
+	public function add_task(){
 		;
 	}
 
-	public get_status(){
+	public function get_status(){
 		;
 	}
 }
