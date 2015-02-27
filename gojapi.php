@@ -47,7 +47,7 @@ class Judger{
 		$requ = json_encode(array('action' => "login", 'password' => $password));
 		$resp = $this->post($requ);
 
-		// echo $resp, "\n";
+		// echo $resp;
 
 		$resp_obj = json_decode($resp);
 		if ($resp_obj->result == true) {
@@ -67,8 +67,13 @@ class Judger{
 	 * @param array $io_data  io test data
 	 */
 	public function add_task($id, $language, $code, $type, $io_data){
+		if (!$this->login) {
+			return null;
+		}
+
 		$requ = json_encode(array(
 			'action' => "task_add", 
+			'password' => $this->password,
 			'sid' => $this->sid,
 			'time' => time(),
 			'language' => $language,
@@ -78,10 +83,27 @@ class Judger{
 			));
 
 		$resp = $this->post($requ);
-		return $resp;
+		return json_decode($resp);
 	}
 
-	public function get_status(){
-		;
+	/**
+	 * get task status
+	 * @param  int $id task id
+	 * @return object     response info object
+	 */
+	public function get_status($id){
+		if (!$this->login) {
+			return null;
+		}
+
+		$requ = json_encode(array(
+			'action' => "task_info",
+			'password' => $this->password,
+			'sid' => $this->sid,
+			'id' => $id,
+			));
+
+		$resp = $this->post($requ);
+		return json_decode($resp);
 	}
 }
